@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Exam App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Start Screen -->
+<div id="startScreen" class="start-screen">
+    <div class="form-card">
+        <h1>"Tayaari..."</h1>
+        <h4><i>Smart Exams. Smarter You.</i></h4>
+        <input type="text" id="inputName" placeholder="Enter Your Name" required />
+        <input type="number" id="inputTime" placeholder="Total Time (in minutes)" required />
+        <input type="file" id="inputExcel" accept=".xlsx, .xls" />
+        <button onclick="startExam()">Start Exam</button>
+    </div>
+</div>
+
+<!-- Exam Screen -->
+<div id="examScreen" style="display: none;">
+    <div class="header">
+        <div id="timer">Time Left: 00:00</div>
+        <div id="userName">Hey </div>
+        <button class="pause-btn" onclick="pauseExam()">Pause</button>
+    </div>
+
+    <div class="container">
+        <div class="exam-card">
+            <div class="exam-content">
+                <div class="question" id="questionText">Loading question...</div>
+                <div class="options" id="optionsContainer"></div>
+            </div>
+
+            <div class="buttons">
+                <button class="nav-btn" onclick="prevQuestion()"><span class="icon">⬅️</span> Previous</button>
+                <button class="nav-btn" onclick="clearResponse()">🗑️ Clear Response</button>
+                <button class="nav-btn" onclick="markForReview()">⭐ Mark for Review</button>
+                <button class="nav-btn" onclick="saveAndNext()">💾 Save & Next</button>
+                <button class="nav-btn" onclick="nextQuestion()">Next <span class="icon">➡️</span></button>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <h3>Question Navigation</h3>
+
+            <div class="marking-info">
+                <span class="info-answered">Answered</span>
+                <span class="info-marked">Marked</span>
+                <span class="info-not-answered">Not Answered</span>
+                <span class="info-unattempted">Unattempted</span>
+            </div>
+
+            <div class="question-nav" id="questionNav"></div>
+
+            <div class="submit-container">
+                <button onclick="submitTest()" class="submit-btn">Submit Test</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Result Screen -->
+<div id="resultScreen" style="display: none;">
+    <div class="result-card">
+        <h2>Exam Completed!</h2>
+        <p id="scoreText"></p>
+        <div id="reviewSection"></div>
+        <button onclick="location.reload()">Retake Exam</button>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
