@@ -40,6 +40,31 @@ body {
     margin-bottom: 20px;
 }
 
+        /* Ensure full height for paragraph section */
+        #paragraphContainer {
+            flex: 1;
+            display: none;
+            background: #eef7ff;
+            padding: 20px;
+            border-radius: 12px;
+            font-style: italic;
+            color: #333;
+            height: 100vh; /* Full viewport height */
+            overflow-y: auto; /* Enable vertical scrolling */
+            transition: width 0.3s; /* Smooth transition for width changes */
+        }
+
+        /* Slider style */
+        .slider-container {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .slider {
+            width: 200px;
+        }
 .form-card input {
     width: 100%;
     padding: 14px;
@@ -142,6 +167,16 @@ body {
     border-right: 1px solid #ddd;
 }
 
+.paragraph {
+    background-color: #e3f2fd;
+    padding: 16px;
+    border-left: 4px solid #1976d2;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-style: italic;
+  }
+  
 .exam-content {
     background: #ffffffc9;
     padding: 25px;
