@@ -1,236 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Tayari - Paragraph Mock Test</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Ensure full height for paragraph section */
-        #paragraphContainer {
-    flex: 1;
-    display: none;
-    background: #eef7ff;
-    padding: 20px;
-    border-radius: 12px;
-    font-style: italic;
-    color: #333;
-    height: 100%; /* Remove 100vh and allow dynamic height */
-    max-height: 80vh; /* Limit the max height */
-    overflow-y: auto; /* Enable vertical scrolling when content overflows */
-    width: 100%; /* Full width */
-    position: relative;
+  <meta charset="UTF-8">
+  <title>Tayari - Paragraph Mock Test</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Ensure full height for paragraph section */
+    #paragraphContainer {
+  flex: 1;
+  display: none;
+  background: #eef7ff;
+  padding: 20px;
+  border-radius: 12px;
+  font-style: italic;
+  color: #333;
+  height: 100vh;
+  overflow-y: auto;      /* ✅ Enables vertical scrolling */
+  overflow-x: hidden;    /* ✅ Prevent horizontal scroll */
+  resize: horizontal;    /* Allows manual width resizing */
+  width: 600px;
+  position: relative;
 }
 
-/* Resizing handle style */
-#resizer {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 10px;
-    height: 100%;
-    cursor: ew-resize; /* Change cursor to indicate horizontal resizing */
-    background-color: #ccc;
-}
-        /* Sidebar with Question Navigation */
-        .sidebar {
-            width: 280px;
-            background-color: #f5f5f5;
-            padding: 20px;
-            border-radius: 10px;
-            margin-left: 20px;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            position: relative;
-        }
 
-        .sidebar h3 {
-            font-size: 1.4rem;
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: bold;
-        }
+    #resizer {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 10px;
+      height: 100%;
+      cursor: ew-resize;
+      background-color: #ccc;
+    }
 
-        /* Marking info section */
-        .marking-info {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            width: 100%;
-            font-size: 0.9rem;
-        }
+    .sidebar {
+      width: 280px;
+      background-color: #f5f5f5;
+      padding: 20px;
+      border-radius: 10px;
+      margin-left: 20px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      position: relative;
+    }
 
-        .marking-info span {
-            margin-right: 10px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-        }
+    .sidebar h3 {
+      font-size: 1.4rem;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
 
-        .answered {
-            background-color: #2196f3; /* Blue for Answered */
-        }
+    /* ✅ Updated marking-info to prevent overflow */
+    .marking-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+      font-size: 0.9rem;
+    }
 
-        .marked {
-            background-color:#6f42c1; /* Orange for Marked */
-        }
+    .marking-info span {
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      min-width: 100px;
+      text-align: center;
+    }
 
-        .not-answered {
-            background-color: #f44336; /* Red for Not Answered */
-        }
+    .answered { background-color: #2196f3; }
+    .marked { background-color: #6f42c1; }
+    .not-answered { background-color: #f44336; }
+    .unattempted { background-color: #9e9e9e; }
 
-        .unattempted {
-            background-color: #9e9e9e; /* Gray for Unattempted */
-        }
+    .question-nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
 
-        /* Question navigation buttons */
-        .question-nav {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-            gap: 10px;
-            width: 100%;
-            margin-bottom: 20px;
-        }
+    .question-nav button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+      text-align: center;
+    }
 
-        .question-nav button {
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
-            text-align: center;
-        }
+    .question-nav button:hover { background-color: #45a049; }
+    .question-nav button.marked { background-color: #ff9800; }
+    .question-nav button.answered { background-color: #2196f3; }
+    .question-nav button.not-answered { background-color: #f44336; }
+    .question-nav button.unattempted { background-color: #9e9e9e; }
 
-        .question-nav button:hover {
-            background-color: #45a049;
-        }
+    .submit-container {
+      margin-top: 20px;
+      width: 100%;
+      text-align: center;
+    }
 
-        .question-nav button.marked {
-            background-color: #ff9800;
-        }
+    .submit-btn {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
 
-        .question-nav button.answered {
-            background-color: #2196f3;
-        }
-
-        .question-nav button.not-answered {
-            background-color: #f44336;
-        }
-
-        .question-nav button.unattempted {
-            background-color: #9e9e9e;
-        }
-
-   /* Submit Button */
-.submit-container {
-    margin-top: 20px;
-    width: 100%;
-    text-align: center;
-}
-
-.submit-btn {
-    background-color: #4caf50; /* Green similar to other buttons */
-    color: white;
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%; /* Full width like other buttons */
-    transition: background-color 0.3s;
-}
-
-.submit-btn:hover {
-    background-color: #45a049; /* Darker green on hover */
-}
-
-    </style>
+    .submit-btn:hover { background-color: #45a049; }
+  </style>
 </head>
 <body>
 
 <!-- Start Screen -->
 <div id="startScreen" class="start-screen">
-    <div class="form-card">
-        <h1>"Tayaari..."</h1>
-        <h4><i>Smart Exams. Smarter You.</i></h4>
-        <input type="text" id="inputName" placeholder="Enter Your Name" required />
-        <input type="number" id="inputTime" placeholder="Total Time (in minutes)" required />
-        <input type="file" id="inputExcel" accept=".xlsx, .xls" />
-        <button onclick="startExam()">Start Exam</button>
-    </div>
+  <div class="form-card">
+    <h1>"Tayaari..."</h1>
+    <h4><i>Smart Exams. Smarter You.</i></h4>
+    <input type="text" id="inputName" placeholder="Enter Your Name" required />
+    <input type="number" id="inputTime" placeholder="Total Time (in minutes)" required />
+    <input type="file" id="inputExcel" accept=".xlsx, .xls" />
+    <button onclick="startExam()">Start Exam</button>
+  </div>
 </div>
 
 <!-- Exam Screen -->
 <div id="examScreen" style="display: none;">
-    <div class="header">
-        <div id="timer">Time Left: 00:00</div>
-        <div id="userName">Hey </div>
-        <button class="pause-btn" onclick="pauseExam()">Pause</button>
+  <div class="header">
+    <div id="timer">Time Left: 00:00</div>
+    <div id="userName">Hey </div>
+    <button class="pause-btn" onclick="pauseExam()">Pause</button>
+  </div>
+
+  <div class="container">
+    <div class="exam-card" style="flex-direction: row; gap: 20px;">
+      <!-- Paragraph Section -->
+      <div id="paragraphContainer" class="paragraph-section">
+        <div id="resizer"></div>
+      </div>
+
+      <!-- Question Section -->
+      <div class="exam-content" style="flex: 2;">
+        <div class="question" id="questionText">Loading question...</div>
+        <div class="options" id="optionsContainer"></div>
+
+        <div class="buttons">
+          <button class="nav-btn" onclick="prevQuestion()">⬅️ Previous</button>
+          <button class="nav-btn" onclick="clearResponse()">🗑️ Clear Response</button>
+          <button class="nav-btn" onclick="markForReview()">⭐ Mark for Review</button>
+          <button class="nav-btn" onclick="saveAndNext()">💾 Save & Next</button>
+          <button class="nav-btn" onclick="nextQuestion()">Next ➡️</button>
+        </div>
+      </div>
     </div>
 
-    <div class="container">
-        <div class="exam-card" style="flex-direction: row; gap: 20px;">
-            <!-- Paragraph Section -->
-            <div id="paragraphContainer" class="paragraph-section">
-                <div id="resizer"></div> <!-- Resizer handle -->
-            </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h3>Question Navigation</h3>
 
-            <!-- Question Section -->
-            <div class="exam-content" style="flex: 2;">
-                <div class="question" id="questionText">Loading question...</div>
-                <div class="options" id="optionsContainer"></div>
+      <div class="marking-info">
+        <span class="answered">Answered</span>
+        <span class="marked">Marked</span>
+        <span class="not-answered">Not Answered</span>
+        <span class="unattempted">Unattempted</span>
+      </div>
 
-                <div class="buttons">
-                    <button class="nav-btn" onclick="prevQuestion()">⬅️ Previous</button>
-                    <button class="nav-btn" onclick="clearResponse()">🗑️ Clear Response</button>
-                    <button class="nav-btn" onclick="markForReview()">⭐ Mark for Review</button>
-                    <button class="nav-btn" onclick="saveAndNext()">💾 Save & Next</button>
-                    <button class="nav-btn" onclick="nextQuestion()">Next ➡️</button>
-                </div>
-            </div>
-        </div>
+      <div class="question-nav" id="questionNav">
+        <button class="answered">Q1</button>
+        <button class="marked">Q2</button>
+        <button class="not-answered">Q3</button>
+        <button class="unattempted">Q4</button>
+      </div>
 
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <h3>Question Navigation</h3>
-
-            <div class="marking-info">
-                <span class="answered">Answered</span>
-                <span class="marked">Marked</span>
-                <span class="not-answered">Not Answered</span>
-                <span class="unattempted">Unattempted</span>
-            </div>
-
-            <div class="question-nav" id="questionNav">
-                <button class="answered">Q1</button>
-                <button class="marked">Q2</button>
-                <button class="not-answered">Q3</button>
-                <button class="unattempted">Q4</button>
-                <!-- Add more buttons dynamically as needed -->
-            </div>
-
-            <div class="submit-container">
-                <button onclick="submitTest()" class="submit-btn">Submit Test</button>
-            </div>
-        </div>
+      <div class="submit-container">
+        <button onclick="submitTest()" class="submit-btn">Submit Test</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Result Screen -->
 <div id="resultScreen" style="display: none;">
-    <div class="result-card">
-        <h2>Exam Completed!</h2>
-        <p id="scoreText"></p>
-        <div id="reviewSection"></div>
-        <button onclick="location.reload()">Retake Exam</button>
-    </div>
+  <div class="result-card">
+    <h2>Exam Completed!</h2>
+    <p id="scoreText"></p>
+    <div id="reviewSection"></div>
+    <button onclick="location.reload()">Retake Exam</button>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
