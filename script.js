@@ -13,7 +13,7 @@ function startExam() {
     const file = document.getElementById('inputExcel').files[0];
 
     if (!name || !time || !file) {
-        alert("Please fill all fields and upload the Excel file.");
+        alert("Please fill all fields and upload the Excel or CSV file.");
         return;
     }
 
@@ -21,9 +21,18 @@ function startExam() {
     document.getElementById('userName').innerText = `Hey ${name}`;
 
     const reader = new FileReader();
+
     reader.onload = function (e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
+        let workbook;
+
+        if (file.name.endsWith('.csv')) {
+            const text = e.target.result;
+            workbook = XLSX.read(text, { type: 'string' });
+        } else {
+            const data = new Uint8Array(e.target.result);
+            workbook = XLSX.read(data, { type: 'array' });
+        }
+
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
@@ -44,7 +53,6 @@ function startExam() {
             });
         });
 
-        // Store unique paragraph groups
         paragraphs = [];
         questions.forEach(q => {
             if (q.paragraph && !paragraphs.find(p => p.text === q.paragraph && p.from === q.from && p.to === q.to)) {
@@ -62,7 +70,11 @@ function startExam() {
         startTimer();
     };
 
-    reader.readAsArrayBuffer(file);
+    if (file.name.endsWith('.csv')) {
+        reader.readAsText(file);
+    } else {
+        reader.readAsArrayBuffer(file);
+    }
 }
 
 function startTimer() {
